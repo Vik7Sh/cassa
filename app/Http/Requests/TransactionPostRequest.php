@@ -26,7 +26,7 @@ class TransactionPostRequest extends FormRequest
     public function rules()
     {
         return [
-            'categorie_id'          => 'required|numeric',
+            'category_id'          => 'required|numeric',
             'type_transaction_id'   => 'required|numeric',
             'account_id'            => 'required|numeric',
             'summ'                  => 'required|min:1|numeric',

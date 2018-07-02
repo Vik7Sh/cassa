@@ -15,62 +15,62 @@ class CategoriesTableSeeder extends Seeder
         DB::table('categories')->insert([
             'type_transaction_id' => '1',
             'account_id' => '1',
-            'name_cat' => 'Готівковий продаж без чеку',
+            'name_category' => 'Готівковий продаж без чеку',
         ]);
         DB::table('categories')->insert([
             'type_transaction_id' => '1',
             'account_id' => '1',
-            'name_cat' => 'Продаж з відправленням товару',
+            'name_category' => 'Продаж з відправленням товару',
         ]);
         DB::table('categories')->insert([
             'type_transaction_id' => '1',
             'account_id' => '1',
-            'name_cat' => 'Продаж онлайн',
+            'name_category' => 'Продаж онлайн',
         ]);
         DB::table('categories')->insert([
             'type_transaction_id' => '1',
             'account_id' => '1',
-            'name_cat' => 'Зняття коштів з безготівкового рахунку',
-        ]);
-        DB::table('categories')->insert([
-            'type_transaction_id' => '1',
-            'account_id' => '2',
-            'name_cat' => 'Продаж по еквайрингу',
+            'name_category' => 'Зняття коштів з безготівкового рахунку',
         ]);
         DB::table('categories')->insert([
             'type_transaction_id' => '1',
             'account_id' => '2',
-            'name_cat' => 'Інші поповнення безготівкового рахунку',
+            'name_category' => 'Продаж по еквайрингу',
         ]);
         DB::table('categories')->insert([
             'type_transaction_id' => '1',
             'account_id' => '2',
-            'name_cat' => 'Поповнення рахунку з готівкового',
+            'name_category' => 'Інші поповнення безготівкового рахунку',
+        ]);
+        DB::table('categories')->insert([
+            'type_transaction_id' => '1',
+            'account_id' => '2',
+            'name_category' => 'Поповнення рахунку з готівкового',
         ]);
         DB::table('categories')->insert([
             'type_transaction_id' => '2',
             'account_id' => '1',
-            'name_cat' => 'Повернення товару',
+            'name_category' => 'Повернення товару',
         ]);
         DB::table('categories')->insert([
             'type_transaction_id' => '2',
             'account_id' => '1',
-            'name_cat' => 'Закупка нового товару',
+            'name_category' => 'Закупка нового товару',
         ]);
         DB::table('categories')->insert([
             'type_transaction_id' => '2',
             'account_id' => '1',
-            'name_cat' => 'Інші витрати',
+            'name_category' => 'Інші витрати',
         ]);
         DB::table('categories')->insert([
             'type_transaction_id' => '2',
             'account_id' => '2',
-            'name_cat' => 'Послуги банку',
+            'name_category' => 'Послуги банку',
         ]);
         DB::table('categories')->insert([
             'type_transaction_id' => '2',
             'account_id' => '2',
-            'name_cat' => 'Інші витрати',
+            'name_category' => 'Інші витрати',
         ]);
 
         //

@@ -32,12 +32,12 @@
             <form class="form-horizontal" action="/cassa" method="POST">
                 {{ csrf_field() }}
                 <div class="form-group">
-                    <label class="col-sm-2 control-label" for="select_acc">Рахунок</label>
+                    <label class="col-sm-2 control-label" for="select_account">Рахунок</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="select_acc" name="account_id">
-                            <option style="color:darkgrey" value="null" data-idacc="0"> --Вибрати рахунок--  </option>
-                            @foreach($acc as $account)
-                                <option data-idacc = "{{$account->id}}" value="{{$account->id}}" @if(intval(old("account_id")) === intval($account->id)) selected @endif>{{$account->name_acc}}</option>
+                        <select class="form-control" id="select_account" name="account_id">
+                            <option style="color:darkgrey" value="null" data-id-account="0"> --Вибрати рахунок--  </option>
+                            @foreach($accounts as $account)
+                                <option data-id-account = "{{$account->id}}" value="{{$account->id}}" @if(intval(old("account_id")) === intval($account->id)) selected @endif>{{$account->name_account}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -45,10 +45,10 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Транзакція</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="select_tr" name="type_transaction_id">
-                            <option style="color:darkgrey" value="null" data-idtr="0"> --Вибрати транзакцію--  </option>
-                            @foreach($tra as $typetr)
-                                <option data-idtr="{{$typetr->id}}" value="{{$typetr->id}}" @if(intval(old("type_transaction_id")) === intval($typetr->id)) selected @endif>{{$typetr->name_tra}}</option>
+                        <select class="form-control" id="select_transaction" name="type_transaction_id">
+                            <option style="color:darkgrey" value="null" data-id-transaction="0"> --Вибрати транзакцію--  </option>
+                            @foreach($transactions as $typeTransaction)
+                                <option data-id-transaction="{{$typeTransaction->id}}" value="{{$typeTransaction->id}}" @if(intval(old("type_transaction_id")) === intval($typeTransaction->id)) selected @endif>{{$typeTransaction->name_transaction}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -56,10 +56,10 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Категорія</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="select_cat" name="categorie_id">
-                            <option style="color:darkgrey" value="null" data-idcat="0"> --Вибрати категорію--  </option>
-                            @foreach($cat as $categ)
-                                <option data-account="{{$categ->account_id}}" data-type="{{$categ->type_transaction_id}}" value="{{$categ->id}}" @if(intval(old("categorie_id")) === intval($categ->id)) selected @endif>{{$categ->name_cat}}</option>
+                        <select class="form-control" id="select_category" name="category_id">
+                            <option style="color:darkgrey" value="null" data-id-category="0"> --Вибрати категорію--  </option>
+                            @foreach($categories as $category)
+                                <option data-account="{{$category->account_id}}" data-type="{{$category->type_transaction_id}}" value="{{$category->id}}" @if(intval(old("category_id")) === intval($category->id)) selected @endif>{{$category->name_category}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -80,57 +80,47 @@
         </div>
         <div class="col-md-3"></div>
     </div>
-    {{--{{ dd($account->toArray()) }}--}}
 
     <script type="text/javascript">
 
         $('#decimal').keypress(function(evt){
-            // return (/^[0-9]*\.?[0-9]*$/).test($(this).val()+evt.key);
             return (/^[+]?\d+(?:\.?\d{0,2})$/).test($(this).val()+evt.key);
         });
-        // $('#decimal').keyup(function(){
-        //     this.value = this.value.replace(/[^\d\.]/g,"");
-        //     if(this.value.match(/\./g).length > 1) {
-        //         this.value = this.value.substr(0, this.value.lastIndexOf("."));
-        //     }
-        // });
 
         $('.form-control').on('change', function() {
-            var ida = $('#select_acc option:selected').attr('data-idacc'),
-                idt = $('#select_tr option:selected').attr('data-idtr');
-            // console.log('change acc ' + ida + ' change tr ' + idt) ;
+            var ida = $('#select_account option:selected').attr('data-id-account'),
+                idt = $('#select_transaction option:selected').attr('data-id-transaction');
 
-
-            $('#select_acc').on('change', function () {
-                $('#select_cat option:selected').each(function(){
+            $('#select_account').on('change', function () {
+                $('#select_category option:selected').each(function(){
                     this.selected=false;
                 });
             });
-            $('#select_tr').on('change', function () {
-                $('#select_cat option:selected').each(function(){
+            $('#select_transaction').on('change', function () {
+                $('#select_category option:selected').each(function(){
                     this.selected=false;
                 });
             });
 
 
             if ((ida === '0') || (idt === '0')){
-                $('#select_cat option').hide();
+                $('#select_category option').hide();
             }
             if ((ida === '1') && (idt === '1')){
-                $("#select_cat option").hide();
-                $("#select_cat option[data-account ='1'][data-type ='1']").show();
+                $("#select_category option").hide();
+                $("#select_category option[data-account ='1'][data-type ='1']").show();
             }
             if ((ida === '1') && (idt === '2')){
-                $("#select_cat option").hide();
-                $("#select_cat option[data-account ='1'][data-type ='2']").show();
+                $("#select_category option").hide();
+                $("#select_category option[data-account ='1'][data-type ='2']").show();
             }
             if ((ida === '2') && (idt === '1')){
-                $("#select_cat option").hide();
-                $("#select_cat option[data-account ='2'][data-type ='1']").show();
+                $("#select_category option").hide();
+                $("#select_category option[data-account ='2'][data-type ='1']").show();
             }
             if ((ida === '2') && (idt === '2')){
-                $("#select_cat option").hide();
-                $("#select_cat option[data-account ='2'][data-type ='2']").show();
+                $("#select_category option").hide();
+                $("#select_category option[data-account ='2'][data-type ='2']").show();
             }
 
         });

@@ -13,10 +13,10 @@ class TypeTransactionsTableSeeder extends Seeder
     public function run()
     {
         DB::table('type_transactions')->insert([
-            'name_tra' => 'Поповнення',
+            'name_transaction' => 'Поповнення',
         ]);
         DB::table('type_transactions')->insert([
-            'name_tra' => 'Витрати',
+            'name_transaction' => 'Витрати',
         ]);
         //
     }

@@ -9,10 +9,10 @@ class Categories extends Model
     public function account(){
         return $this->belongsTo(Accounts::class);
     }
-    public function alltransaction(){
+    public function allTransaction(){
         return $this->hasMany(AllTransactions::class);
     }
-    public function typetransaction(){
+    public function typeTransaction(){
         return $this->belongsTo(TypeTransactions::class);
     }
     //

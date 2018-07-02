@@ -19,43 +19,15 @@ class CassaController extends Controller
      */
     public function index()
     {
-//        $cash_plus = DB::table('all_transactions')
-//            ->where('account_id', 1)->where('type_transaction_id', 1)
-//            ->where('cancelled', 0)->sum('summ');
-//        $cash_minus = DB::table('all_transactions')
-//            ->where('account_id', 1)->where('type_transaction_id', 2)
-//            ->where('cancelled', 0)->sum('summ');
-//        $card_plus = DB::table('all_transactions')
-//            ->where('account_id', 2)->where('type_transaction_id', 1)
-//            ->where('cancelled', 0)->sum('summ');
-//        $card_minus = DB::table('all_transactions')
-//            ->where('account_id', 2)->where('type_transaction_id', 2)
-//            ->where('cancelled', 0)->sum('summ');
-//        $cash_perekaz = DB::table('all_transactions')
-//            ->where('categorie_id', 4)->sum('summ');
-//        $card_perekaz = DB::table('all_transactions')
-//            ->where('categorie_id', 7)->sum('summ');
-//
-//        $cash_full = $cash_plus - $cash_minus - $card_perekaz;
-//        $card_full = $card_plus - $card_minus - $cash_perekaz;
-//
-//        DB::table('accounts')
-//            ->where('id', 1)->update(['balance' => $cash_full]);
-//        DB::table('accounts')
-//            ->where('id', 2)->update(['balance' => $card_full]);
 
-
-        $acc = Accounts::all();
-        $alltrans = AllTransactions::with('account' , 'categorie' , 'typetransaction')->orderBy('id' , 'desc')->get();
-
-//        dd($alltrans->toArray());
+        $accounts = Accounts::all();
+        $allTransactions = AllTransactions::with('account' , 'category' , 'typeTransaction')->orderBy('id' , 'desc')->get();
 
         return view('cassa')->with([
-            'acc' => $acc,
-            'alltrans' => $alltrans,
+            'accounts' => $accounts,
+            'allTransactions' => $allTransactions,
         ]);
 
-        //
     }
 
     /**
@@ -65,14 +37,14 @@ class CassaController extends Controller
      */
     public function create()
     {
-        $acc = Accounts::all();
-        $tra = TypeTransactions::all();
-        $cat = Categories::all();
+        $accounts = Accounts::all();
+        $transactions = TypeTransactions::all();
+        $categories = Categories::all();
 
         return view('transactions')->with([
-            'acc' => $acc,
-            'tra' => $tra,
-            'cat' => $cat,
+            'accounts' => $accounts,
+            'transactions' => $transactions,
+            'categories' => $categories,
         ]);
         //
     }
@@ -90,42 +62,40 @@ class CassaController extends Controller
             return redirect()->back()->withError('Перевірте введені дані!')->withInput();
         }
 
-
         $validated = $request->validated();
 
-        $alltr = new AllTransactions();
-        $alltr->categorie_id         = $validated['categorie_id'];
-        $alltr->type_transaction_id  = $validated['type_transaction_id'];
-        $alltr->account_id           = $validated['account_id'];
-        $alltr->summ                 = $validated['summ'];
-        $result = $alltr->save();
+        $allTransactions = new AllTransactions();
+        $allTransactions->category_id         = $validated['category_id'];
+        $allTransactions->type_transaction_id  = $validated['type_transaction_id'];
+        $allTransactions->account_id           = $validated['account_id'];
+        $allTransactions->summ                 = $validated['summ'];
+        $result = $allTransactions->save();
 
-        $acc = Accounts::where('id',$validated['account_id'])->first();
-        $cc = Categories::where('id',$validated['categorie_id'])->first();
-        $tt = TypeTransactions::where('id',$validated['type_transaction_id'])->first();
+        $accounts = Accounts::where('id',$validated['account_id'])->first();
+        $categories = Categories::where('id',$validated['category_id'])->first();
+        $typeTransactions = TypeTransactions::where('id',$validated['type_transaction_id'])->first();
 
-
-        if ($tt->name_tra === 'Поповнення') {
-            $acc->balance = $acc->balance + $validated['summ'];
+        if ($typeTransactions->id === 1) {
+            $accounts->balance = $accounts->balance + $validated['summ'];
         }
-        if ($tt->name_tra === 'Витрати') {
-            $acc->balance = $acc->balance - $validated['summ'];
+        if ($typeTransactions->id === 2) {
+            $accounts->balance = $accounts->balance - $validated['summ'];
         }
-        if ($cc->name_cat === 'Зняття коштів з безготівкового рахунку') {
+        if ($categories->id === 4) {
             $cash_perekaz = Accounts::where('id', 2)->first();
             $cash_perekaz->balance = $cash_perekaz->balance - $validated['summ'];
             $cash_perekaz->save();
         }
-        if ($cc->name_cat === 'Поповнення рахунку з готівкового') {
+        if ($categories->id === 7) {
             $card_perekaz = Accounts::where('id', 1)->first();
             $card_perekaz->balance = $card_perekaz->balance - $validated['summ'];
             $card_perekaz->save();
         }
-        $resultAcc = $acc->save();
+        $resultAccount = $accounts->save();
 
 
 
-        if($result && $resultAcc) {
+        if($result && $resultAccount) {
             return redirect('/');
         } else {
             return redirect()->back()->withError('Неможу зберегти дані')->withInput();
@@ -167,38 +137,37 @@ class CassaController extends Controller
         $new_cancelled = '2';
         $cancelled = AllTransactions::where('id', $id)->first();
         AllTransactions::where('id', $id)->update(['cancelled' => 1]);
-//        dd($cancelled->toArray());
 
-        $cancel_tr = new AllTransactions();
-        $cancel_tr->categorie_id         = $cancelled->categorie_id;
-        $cancel_tr->type_transaction_id  = $cancelled->type_transaction_id;
-        $cancel_tr->account_id           = $cancelled->account_id;
-        $cancel_tr->summ                 = $cancelled->summ;
-        $cancel_tr->cancelled            = $new_cancelled;
-        $cancel_tr->cancelled_id         = $id;
-        $result = $cancel_tr->save();
+        $cancelTransaction = new AllTransactions();
+        $cancelTransaction->category_id         = $cancelled->category_id;
+        $cancelTransaction->type_transaction_id  = $cancelled->type_transaction_id;
+        $cancelTransaction->account_id           = $cancelled->account_id;
+        $cancelTransaction->summ                 = $cancelled->summ;
+        $cancelTransaction->cancelled            = $new_cancelled;
+        $cancelTransaction->cancelled_id         = $id;
+        $result = $cancelTransaction->save();
 
-        $acc = Accounts::where('id',$cancelled->account_id)->first();
-        $cc = Categories::where('id',$cancelled->categorie_id)->first();
-        $tt = TypeTransactions::where('id',$cancelled->type_transaction_id)->first();
+        $accounts = Accounts::where('id',$cancelled->account_id)->first();
+        $categories = Categories::where('id',$cancelled->category_id)->first();
+        $typeTransactions = TypeTransactions::where('id',$cancelled->type_transaction_id)->first();
 
-        if ($tt->name_tra === 'Поповнення') {
-            $acc->balance = $acc->balance - $cancelled->summ;
+        if ($typeTransactions->id === 1) {
+            $accounts->balance = $accounts->balance - $cancelled->summ;
         }
-        if ($tt->name_tra === 'Витрати') {
-            $acc->balance = $acc->balance + $cancelled->summ;
+        if ($typeTransactions->id === 2) {
+            $accounts->balance = $accounts->balance + $cancelled->summ;
         }
-        if ($cc->name_cat === 'Зняття коштів з безготівкового рахунку') {
+        if ($categories->id === 4) {
             $cash_perekaz = Accounts::where('id', 2)->first();
             $cash_perekaz->balance = $cash_perekaz->balance + $cancelled->summ;
             $cash_perekaz->save();
         }
-        if ($cc->name_cat === 'Поповнення рахунку з готівкового') {
+        if ($categories->id === 7) {
             $card_perekaz = Accounts::where('id', 1)->first();
             $card_perekaz->balance = $card_perekaz->balance + $cancelled->summ;
             $card_perekaz->save();
         }
-        $acc->save();
+        $accounts->save();
 
         if($result) {
             return redirect('/');

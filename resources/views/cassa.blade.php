@@ -30,9 +30,9 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($acc as $account)
+            @foreach($accounts as $account)
             <tr>
-                <td>{{$account->name_acc}}</td>
+                <td>{{$account->name_account}}</td>
                 <td>{{$account->balance}}</td>
             </tr>
             @endforeach
@@ -64,27 +64,26 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($alltrans as $alltr)
+            @foreach($allTransactions as $allTransaction)
             <tr>
-                <td>{{$alltr->id}}</td>
-                <td>{{$alltr->created_at->format('d-m-Y')}}</td>
-                <td>{{$alltr->categorie->name_cat}}</td>
-                <td>{{$alltr->typetransaction->name_tra}}</td>
-                <td>{{$alltr->account->name_acc}}</td>
-                <td>{{$alltr->summ}}</td>
-                {{--<td>{{$alltr->canceled}}</td>--}}
-                @if($alltr->cancelled === 0)
+                <td>{{$allTransaction->id}}</td>
+                <td>{{$allTransaction->created_at->format('d-m-Y')}}</td>
+                <td>{{$allTransaction->category->name_category}}</td>
+                <td>{{$allTransaction->typeTransaction->name_transaction}}</td>
+                <td>{{$allTransaction->account->name_account}}</td>
+                <td>{{$allTransaction->summ}}</td>
+                @if($allTransaction->cancelled === 0)
                     <td>
-                        <form action="/cassa/{{$alltr->id}}" method="POST">
+                        <form action="/cassa/{{$allTransaction->id}}" method="POST">
                             {{method_field("PUT")}}
                             {{csrf_field()}}
                             <button type="submit" class="btn btn-danger btn-xs">Відмінити</button>
                         </form>
                     </td>
-                @elseif($alltr->cancelled === 1)
-                    <td>Відмінено {{$alltr->updated_at->format('d-m-Y')}}</td>
-                @else($alltr->cancelled === 2)
-                    <td>Відміна #{{$alltr->cancelled_id}} {{$alltr->updated_at->format('d-m-Y')}}</td>
+                @elseif($allTransaction->cancelled === 1)
+                    <td class="danger">Відмінено {{$allTransaction->updated_at->format('d-m-Y')}}</td>
+                @else($allTransaction->cancelled === 2)
+                    <td class="info">Відміна #{{$allTransaction->cancelled_id}} {{$allTransaction->updated_at->format('d-m-Y')}}</td>
                 @endif
             </tr>
             @endforeach
@@ -94,6 +93,6 @@
     </div>
     <div class="col-md-1"></div>
 </div>
-{{--{{ dd($acc->toArray()) }}--}}
+
 </body>
 </html>

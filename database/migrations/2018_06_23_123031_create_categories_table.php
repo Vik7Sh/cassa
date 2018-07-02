@@ -19,7 +19,7 @@ class CreateCategoriesTable extends Migration
             $table->foreign('type_transaction_id')->references('id')->on('type_transactions');
             $table->integer('account_id')->unsigned();
             $table->foreign('account_id')->references('id')->on('accounts');
-            $table->string('name_cat');
+            $table->string('name_category');
             $table->timestamps();
         });
     }

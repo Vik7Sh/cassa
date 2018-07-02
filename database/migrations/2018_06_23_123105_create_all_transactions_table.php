@@ -15,8 +15,8 @@ class CreateAllTransactionsTable extends Migration
     {
         Schema::create('all_transactions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('categorie_id')->unsigned();
-            $table->foreign('categorie_id')->references('id')->on('categories');
+            $table->integer('category_id')->unsigned();
+            $table->foreign('category_id')->references('id')->on('categories');
             $table->integer('type_transaction_id')->unsigned();
             $table->foreign('type_transaction_id')->references('id')->on('type_transactions');
             $table->integer('account_id')->unsigned();

@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Accounts extends Model
 {
-    public function alltransaction(){
+    public function allTransaction(){
         return $this->hasMany(AllTransactions::class);
     }
-    public function categorie(){
+    public function category(){
         return $this->hasMany(Categories::class);
     }
     //

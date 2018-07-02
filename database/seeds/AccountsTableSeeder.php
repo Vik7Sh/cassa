@@ -13,10 +13,10 @@ class AccountsTableSeeder extends Seeder
     public function run()
     {
         DB::table('accounts')->insert([
-            'name_acc' => 'Готівка',
+            'name_account' => 'Готівка',
         ]);
         DB::table('accounts')->insert([
-            'name_acc' => 'Безготівка',
+            'name_account' => 'Безготівка',
         ]);
         //
     }
